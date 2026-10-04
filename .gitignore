@@ -33,11 +33,6 @@ dist/
 build/
 .output/
 
-# Generated tickets (keep directory structure with .gitkeep)
-storage/tickets/*.png
-backend/storage/tickets/*.png
-static/tickets/*.png
-backend/static/tickets/*.png
 
 # IDE & Editor configuration
 .vscode/
