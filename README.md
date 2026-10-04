@@ -1,6 +1,6 @@
 # TicketLocal 🎟️
 
-TicketLocal is a high-concurrency, production-style movie and live event ticketing platform (BookMyShow / District clone). It is designed to handle high ticket demand with distributed seat locks, ACID transactions, dynamic pricing rules, interactive SVG seat maps, and offline QR ticket generation.
+TicketLocal is a high-concurrency movie and live event ticketing platform (BookMyShow / District clone). It is built with distributed seat locks, ACID transactions, dynamic pricing rules, interactive SVG seat maps, and offline QR ticket generation.
 
 ---
 
@@ -31,7 +31,7 @@ TicketLocal is a high-concurrency, production-style movie and live event ticketi
 ## 🏗️ Architecture & Tech Stack
 
 - **Backend**: Python 3.11+, FastAPI (async), SQLAlchemy 2.0 (async), Pydantic v2
-- **Database**: PostgreSQL (local / Docker) + SQLite aiosqlite automatic fallback
+- **Database**: PostgreSQL (local / Docker) + SQLite (`aiosqlite`) automatic fallback
 - **Distributed Cache & Locks**: Redis (`redis.asyncio`) + in-memory `fakeredis` fallback
 - **QR Engine**: `qrcode` + `Pillow` (threadpool execution)
 - **Authentication**: JWT Bearer token + bcrypt password hashing
@@ -39,54 +39,100 @@ TicketLocal is a high-concurrency, production-style movie and live event ticketi
 
 ---
 
-## 🚀 Quickstart Guide
+## 🚀 How to Run the Application
+
+The application has **built-in automatic fallbacks** (`aiosqlite` and `fakeredis`). Docker is completely optional; you can run the entire stack locally with standard Python and Node.
 
 ### 1. Prerequisites
-- Python 3.11+ (or `uv`)
+- Python 3.11+
 - Node.js 18+ and npm
-- Docker (optional, for native PostgreSQL and Redis)
+- Docker & Docker Compose (Optional, for native PostgreSQL and Redis)
 
-### 2. Start PostgreSQL & Redis (Optional Docker Compose)
+---
+
+### 2. Environment Configuration
+Copy the sample environment file to the backend:
+
+**Windows**:
+```powershell
+copy .env.example backend\.env
+```
+*(or run `setup_env.bat`)*
+
+**macOS / Linux**:
+```bash
+cp .env.example backend/.env
+```
+*(or run `./setup_env.sh`)*
+
+---
+
+### 3. Start PostgreSQL & Redis (Optional Docker Mode)
+If you have Docker and want to run native PostgreSQL and Redis:
 ```bash
 docker-compose up -d
 ```
+*Note: If Docker is not used, the backend automatically uses SQLite (`ticketlocal.db`) and in-memory `fakeredis`.*
 
-### 3. Backend Setup
+---
+
+### 4. Backend Setup & Run
+
+Open a terminal in the project root:
+
 ```bash
 cd backend
 
-# Create virtual environment & install dependencies (or with uv)
-uv pip install -r requirements.txt
+# Create and activate virtual environment (Standard Python)
+python -m venv .venv
+# On Windows:
+.venv\Scripts\activate
+# On macOS/Linux:
+source .venv/bin/activate
 
-# Run migrations & seed data
-uv run python app/seed.py
+# Install dependencies
+pip install -r requirements.txt
 
-# Start FastAPI development server
-uv run uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+# Start FastAPI development server (auto-seeds database on startup)
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
-*API Swagger Documentation will be available at:* `http://127.0.0.1:8000/docs`
 
-### 4. Frontend Setup
+> **Using `uv` (faster alternative)**:
+> ```bash
+> uv pip install -r requirements.txt
+> uv run uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+> ```
+
+- **Backend API URL**: `http://127.0.0.1:8000`
+- **Swagger Documentation**: `http://127.0.0.1:8000/docs`
+
+---
+
+### 5. Frontend Setup & Run
+
+Open a second terminal:
+
 ```bash
 cd frontend
 
-# Install packages
+# Install npm dependencies
 npm install
 
 # Start Vite development server
 npm run dev
 ```
-*Frontend Web Application will be available at:* `http://localhost:5173`
+
+- **Frontend Web App**: `http://localhost:5173`
 
 ---
 
 ## 🧪 Running the Pytest Test Suite
 
 The test suite covers full concurrency stress testing, ACID double-booking prevention, pricing surges, and TTL expiry:
+
 ```bash
 cd backend
-$env:PYTHONPATH="."
-uv run python -m pytest tests/ -v
+python -m pytest tests/ -v
 ```
 
 ### Test Coverage Highlights:
@@ -97,9 +143,9 @@ uv run python -m pytest tests/ -v
 
 ---
 
-## 📋 Default Credentials
+## 📋 Default Credentials & Test Cards
 
-- **Demo Citizen User**: `demo@ticketlocal.com` / `Demo@1234`
+- **Demo User**: `demo@ticketlocal.com` / `Demo@1234`
 - **Admin User**: `admin@ticketlocal.com` / `Admin@1234`
 - **Mock Payment Cards**:
   - *Valid Card (Success)*: `4000 1234 5678 9010`, Exp: `12/28`, CVV: `123`
