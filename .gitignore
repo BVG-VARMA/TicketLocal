@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+*/node_modules/
+.venv/
+*/.venv/
+env/
+venv/
+ENV/
+
+# Byte-compiled / optimized / Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*/.pytest_cache/
+
+# Databases & local data stores
+*.db
+*.sqlite
+*.sqlite3
+.pgdata/
+*/.pgdata/
+
+# Environment variables & secrets (keep .env.example)
+.env
+*/.env
+.env.local
+.env.*.local
+
+# Frontend builds
+dist/
+*/dist/
+build/
+.output/
+
+# Generated tickets (keep directory structure with .gitkeep)
+storage/tickets/*.png
+backend/storage/tickets/*.png
+static/tickets/*.png
+backend/static/tickets/*.png
+
+# IDE & Editor configuration
+.vscode/
+*/.vscode/
+.idea/
+*/.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
